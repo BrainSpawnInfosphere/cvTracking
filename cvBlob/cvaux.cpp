@@ -19,12 +19,6 @@
 
 #include <cmath>
 
-#if (defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__) || (defined(__APPLE__) & defined(__MACH__)))
-#include <cv.h>
-#else
-#include <opencv/cv.h>
-#endif
-
 #include "cvblob.h"
 
 namespace cvb
@@ -35,30 +29,47 @@ namespace cvb
 
   double cvDotProductPoints(CvPoint const &a, CvPoint const &b, CvPoint const &c)
   {
+    /*
     double abx = b.x-a.x;
     double aby = b.y-a.y;
     double bcx = c.x-b.x;
     double bcy = c.y-b.y;
 
     return abx*bcx + aby*bcy;
+    */
+    cv::Point aa(a.x,a.y);
+    cv::Point bb(b.x,b.y);
+    return aa.dot(bb);
   }
 
   double cvCrossProductPoints(CvPoint const &a, CvPoint const &b, CvPoint const &c)
   {
+    /*
     double abx = b.x-a.x;
     double aby = b.y-a.y;
     double acx = c.x-a.x;
     double acy = c.y-a.y;
 
     return abx*acy - aby*acx;
+    */
+    
+    cv::Point aa(a.x,a.y);
+    cv::Point bb(b.x,b.y);
+    return aa.cross(bb);
   }
 
   double cvDistancePointPoint(CvPoint const &a, CvPoint const &b)
   {
+    /*
     double abx = a.x-b.x;
     double aby = a.y-b.y;
 
     return sqrt(abx*abx + aby*aby);
+    */
+    
+    cv::Point aa(a.x,a.y);
+    cv::Point bb(b.x,b.y);
+    return norm(aa-bb);
   }
 
   double cvDistanceLinePoint(CvPoint const &a, CvPoint const &b, CvPoint const &c, bool isSegment)

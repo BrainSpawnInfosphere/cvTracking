@@ -15,8 +15,8 @@ set(version ${CVBLOB_VERSION})
 
 #--- Code -----------------------------------------------------------
 add_subdirectory(cvBlob)
-add_subdirectory(test)
-add_subdirectory(samples)
+#add_subdirectory(test)
+#add_subdirectory(samples)
 
 #--- Package Config -------------------------------------------------
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cvblob.pc.cmake.in" "${CMAKE_BINARY_DIR}/cvblob.pc" @ONLY IMMEDIATE)

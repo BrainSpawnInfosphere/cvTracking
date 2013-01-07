@@ -15,7 +15,8 @@ on his [cvBlob](http://code.google.com/p/cvblob/).
 
 * Change all `structs` to `classes`
 * Change `IplImage` to `Mat`
-* Optimize code
+* Optimize code 
+* Leverage OpenCV 2.x API, remove unnecessary old C code
 * Document code for doxygen output
 * Build and install documentation to share/docs
 * Make better name than cvBlob so as not to add more confusion with all of the cvBlob libraries
