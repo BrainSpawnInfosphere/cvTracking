@@ -17,16 +17,6 @@
 // along with cvBlob.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-/// \file cvblob.h
-/// \brief OpenCV Blob header file.
-
-#ifdef SWIG
-%module cvblob
-%{
-#include "cvblob.h"
-%}
-#endif
-
 #ifndef CVBLOB_H
 #define CVBLOB_H
 
@@ -36,11 +26,7 @@
 #include <vector>
 #include <limits>
 
-#if (defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__))
-    #include <cv.h>
-#else
-    #include <opencv2/opencv.hpp>
-#endif
+#include <opencv2/opencv.hpp>
 
 #ifndef __CV_BEGIN__
 #define __CV_BEGIN__ __BEGIN__
@@ -58,17 +44,6 @@ namespace cvb // namespace_start
   /// \brief Type of label.
   /// \see IPL_DEPTH_LABEL
   typedef unsigned int CvLabel;
-  //typedef unsigned char CvLabel;
-
-  /// \def IPL_DEPTH_LABEL
-  /// \brief Size of a label in bits.
-  /// \see CvLabel
-#define IPL_DEPTH_LABEL (sizeof(cvb::CvLabel)*8)
-
-  /// \def CV_BLOB_MAX_LABEL
-  /// \brief Max label number.
-  /// \see CvLabel.
-#define CV_BLOB_MAX_LABEL std::numeric_limits<CvLabel>::max()
   
   /// \brief Type of identification numbers.
   typedef unsigned int CvID;
@@ -96,7 +71,6 @@ namespace cvb // namespace_start
     
     CvLabel label; ///< Label assigned to the blob.
     
-    /// \fn double cvAngle(CvBlob *blob)
     /// \brief Calculates angle orientation of a blob.
     /// \param blob Blob.
     /// \return Angle orientation in radians.
@@ -114,27 +88,6 @@ namespace cvb // namespace_start
     std::vector<cv::Point> contour; ///< Contour for drawing
     cv::Moments moment; 
     
-    /*
-    double m10; ///< Moment 10.
-    double m01; ///< Moment 01.
-    double m11; ///< Moment 11.
-    double m20; ///< Moment 20.
-    double m02; ///< Moment 02.
-    
-    double u11; ///< Central moment 11.
-    double u20; ///< Central moment 20.
-    double u02; ///< Central moment 02.
-
-    double n11; ///< Normalized central moment 11.
-    double n20; ///< Normalized central moment 20.
-    double n02; ///< Normalized central moment 02.
-
-    double p1; ///< Hu moment 1.
-    double p2; ///< Hu moment 2.
-    */
-    
-    //CvContourChainCode contour;           ///< Contour.
-    //CvContoursChainCode internalContours; ///< Internal contours.
   };
   
   //////////////////////////////////////////////////////////////////////////////
@@ -143,8 +96,7 @@ namespace cvb // namespace_start
   /// A map is used to access each blob from its label number.
   /// \see CvLabel
   /// \see CvBlob
-  //typedef std::map<CvLabel,CvBlob *> CvBlobs;
-  class CvBlobs : public std::map<CvLabel,CvBlob *> {
+  class CvBlobs : public std::map<CvLabel,CvBlob*> {
   public:
     CvBlobs(void){;}
     
@@ -174,8 +126,6 @@ namespace cvb // namespace_start
     /// \param blobs List of blobs.
     /// \param label Label to leave.
     void cvFilterByLabel(CvLabel label);
-    
-    //static CvLabel currentLabel;
   
   };
 
@@ -183,43 +133,7 @@ namespace cvb // namespace_start
   /// \brief Pair (label, blob).
   /// \see CvLabel
   /// \see CvBlob
-  typedef std::pair<CvLabel,CvBlob *> CvLabelBlob;
-  
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Aux
-  
-  /// \fn double cvDotProductPoints(CvPoint const &a, CvPoint const &b, CvPoint const &c)
-  /// \brief Dot product of the vectors ab and bc.
-  /// \param a First point.
-  /// \param b Middle point.
-  /// \param c Last point.
-  /// \return Dot product of ab and bc.
-  double cvDotProductPoints(CvPoint const &a, CvPoint const &b, CvPoint const &c);
-  
-  /// \fn double cvCrossProductPoints(CvPoint const &a, CvPoint const &b, CvPoint const &c)
-  /// \brief Cross product of the vectors ab and bc.
-  /// \param a Point.
-  /// \param b Point.
-  /// \param c Point.
-  /// \return Cross product of ab and bc.
-  double cvCrossProductPoints(CvPoint const &a, CvPoint const &b, CvPoint const &c);
-
-  /// \fn double cvDistancePointPoint(CvPoint const &a, CvPoint const &b)
-  /// \brief Distance between two points.
-  /// \param a Point.
-  /// \param b Point.
-  /// \return Distance.
-  double cvDistancePointPoint(CvPoint const &a, CvPoint const &b);
-
-  /// \fn double cvDistanceLinePoint(CvPoint const &a, CvPoint const &b, CvPoint const &c, bool isSegment=true)
-  /// \brief Distance between line ab and point c.
-  /// \param a First point of the segment.
-  /// \param b Second point of the segment.
-  /// \param c Point.
-  /// \param isSegment If false then the distance will be calculated from the line defined by the points a and b, to the point c.
-  /// \return Distance between ab and c.
-  double cvDistanceLinePoint(CvPoint const &a, CvPoint const &b, CvPoint const &c, bool isSegment=true);
+  //typedef std::pair<CvLabel,CvBlob *> CvLabelBlob;
   
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Tracking
@@ -293,11 +207,6 @@ namespace cvb // namespace_start
 /// \brief Overload operator "<<" for printing blob structure.
 /// \return Stream.
 std::ostream& operator<< (std::ostream& output, const cvb::CvBlob& b);
-
-/// \fn std::ostream& operator<< (std::ostream& output, const cvb::CvContourPolygon& p)
-/// \brief Overload operator "<<" for printing polygons in CSV format.
-/// \return Stream.
-//std::ostream& operator<< (std::ostream& output, const cvb::CvContourPolygon& p);
 
 /// \fn std::ostream& operator<< (std::ostream& output, const cvb::CvTrack& t)
 /// \brief Overload operator "<<" for printing track structure.
