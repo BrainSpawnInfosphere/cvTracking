@@ -19,23 +19,23 @@ int main()
 {
   CvTracks tracks;
 
-  cvNamedWindow("red_object_tracking", CV_WINDOW_AUTOSIZE);
+  cv::namedWindow("red_object_tracking", CV_WINDOW_AUTOSIZE);
 
-  CvCapture *capture = cvCaptureFromCAM(0);
-  cvGrabFrame(capture);
-  IplImage *img = cvRetrieveFrame(capture);
+  cv::Capture *capture = cvCaptureFromCAM(0);
+  cv::GrabFrame(capture);
+  cv::Mat img = cvRetrieveFrame(capture);
 
-  CvSize imgSize = cvGetSize(img);
+  cv::Size imgSize = cvGetSize(img);
 
-  IplImage *frame = cvCreateImage(imgSize, img->depth, img->nChannels);
+  cv::Mat frame = cv::Mat(img);
 
-  IplConvKernel* morphKernel = cvCreateStructuringElementEx(5, 5, 1, 1, CV_SHAPE_RECT, NULL);
+  //IplConvKernel* morphKernel = cvCreateStructuringElementEx(5, 5, 1, 1, CV_SHAPE_RECT, NULL);
 
   //unsigned int frameNumber = 0;
   unsigned int blobNumber = 0;
 
   bool quit = false;
-  while (!quit&&cvGrabFrame(capture))
+  while (!quit && cv::grabFrame(capture))
   {
     IplImage *img = cvRetrieveFrame(capture);
 

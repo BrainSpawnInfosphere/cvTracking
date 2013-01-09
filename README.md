@@ -6,15 +6,15 @@
 
 cvBlob is written for OpenCV 2.x library which uses modern C++ concepts. 
 
-cvBlob is cloned from the original work of Cristóbal Carnero Liñán (grendel.ccl@gmail.com)
-on his [cvBlob](http://code.google.com/p/cvblob/). 
+cvBlob used parts and ideas from Cristóbal Carnero Liñán's (grendel.ccl@gmail.com) 
+[cvBlob](http://code.google.com/p/cvblob/). 
 
 ---------------------------------------------------------------------------------------
 
 ## To Do
 
-* Change all `structs` to `classes`
-* Change `IplImage` to `Mat`
+* [done] Change all `structs` to `classes`
+* [done] Change `IplImage` to `Mat`
 * Optimize code 
 * Leverage OpenCV 2.x API, remove unnecessary old C code
 * Document code for doxygen output

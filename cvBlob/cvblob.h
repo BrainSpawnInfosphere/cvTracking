@@ -85,7 +85,7 @@ namespace cvb // namespace_start
     unsigned int maxy; ///< y max.
     
     cv::Point2f centroid; ///< Centroid.
-    std::vector<cv::Point> contour; ///< Contour for drawing
+    std::vector< std::vector<cv::Point> > contour; ///< Contour for drawing
     cv::Moments moment; 
     
   };
@@ -164,42 +164,41 @@ namespace cvb // namespace_start
     unsigned int inactive; ///< Indicates number of frames that has been missing.
   };
 
-  /// \var typedef std::map<CvID, CvTrack *> CvTracks
   /// \brief List of tracks.
   /// \see CvID
   /// \see CvTrack
-  //typedef std::map<CvID, CvTrack *> CvTracks;
   class CvTracks : public std::map<CvID, CvTrack *> {
   public:
     CvTracks(void){;}
+    
     ~CvTracks(void){
         // clear calls CvTrack's destructor
         clear();
     }
+    
   };
 
-  /// \var typedef std::pair<CvID, CvTrack *> CvIDTrack
-  /// \brief Pair (identification number, track).
-  /// \see CvID
-  /// \see CvTrack
-  typedef std::pair<CvID, CvTrack *> CvIDTrack;
+/// \fn cvUpdateTracks(CvBlobs const &b, CvTracks &t, const double thDistance, const unsigned int thInactive, const unsigned int thActive=0)
+/// \brief Updates list of tracks based on current blobs.
+/// Tracking based on:
+/// A. Senior, A. Hampapur, Y-L Tian, L. Brown, S. Pankanti, R. Bolle. Appearance Models for
+/// Occlusion Handling. Second International workshop on Performance Evaluation of Tracking and
+/// Surveillance Systems & CVPR'01. December, 2001.
+/// (http://www.research.ibm.com/peoplevision/PETS2001.pdf)
+/// \param b List of blobs.
+/// \param t List of tracks.
+/// \param thDistance Max distance to determine when a track and a blob match.
+/// \param thInactive Max number of frames a track can be inactive.
+/// \param thActive If a track becomes inactive but it has been active less than thActive frames, the track will be deleted.
+/// \see CvBlobs
+/// \see Tracks
+void cvUpdateTracks(CvBlobs const &b, CvTracks &t, const double thDistance, const unsigned int thInactive, const unsigned int thActive=0);
 
+/// \brief Pair (identification number, track).
+/// \see CvID
+/// \see CvTrack
+typedef std::pair<CvID, CvTrack *> CvIDTrack;
 
-  /// \fn cvUpdateTracks(CvBlobs const &b, CvTracks &t, const double thDistance, const unsigned int thInactive, const unsigned int thActive=0)
-  /// \brief Updates list of tracks based on current blobs.
-  /// Tracking based on:
-  /// A. Senior, A. Hampapur, Y-L Tian, L. Brown, S. Pankanti, R. Bolle. Appearance Models for
-  /// Occlusion Handling. Second International workshop on Performance Evaluation of Tracking and
-  /// Surveillance Systems & CVPR'01. December, 2001.
-  /// (http://www.research.ibm.com/peoplevision/PETS2001.pdf)
-  /// \param b List of blobs.
-  /// \param t List of tracks.
-  /// \param thDistance Max distance to determine when a track and a blob match.
-  /// \param thInactive Max number of frames a track can be inactive.
-  /// \param thActive If a track becomes inactive but it has been active less than thActive frames, the track will be deleted.
-  /// \see CvBlobs
-  /// \see Tracks
-  void cvUpdateTracks(CvBlobs const &b, CvTracks &t, const double thDistance, const unsigned int thInactive, const unsigned int thActive=0);
 
 } // namespace_end
 

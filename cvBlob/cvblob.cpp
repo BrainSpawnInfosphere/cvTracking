@@ -48,8 +48,9 @@ bool CvBlobs::getBlobs(const cv::Mat& image){
         cv::Rect r = cv::boundingRect( cv::Mat(contours_poly) );
 
         blob->init(m,l,r);
-        
-        for(unsigned int j=0;j< contours[i].size();++j) blob->contour.push_back(contours[i][j]);
+        std::vector<cv::Point> v;
+        for(unsigned int j=0;j< contours[i].size();++j) v.push_back(contours[i][j]);
+        blob->contour.push_back(v);
         
         // need to push into map!!
         insert( pair<CvLabel,CvBlob*>(l,blob) );
@@ -128,7 +129,7 @@ double CvBlob::cvAngle(void)
 
 ostream& operator<< (ostream& output, const cvb::CvBlob& b)
 {
-    output << b.label << ": " << b.getArea() << ", (" << b.centroid.x << ", " << b.centroid.y << "), [(" << b.minx << ", " << b.miny << ") - (" << b.maxx << ", " << b.maxy << ")]";
+    output << b.label << ": " << b.getArea() << ", (" << b.centroid.x << ", " << b.centroid.y << "), [(" << b.minx << ", " << b.miny << ") - (" << b.maxx << ", " << b.maxy << ")] contours:"<<b.contour.size();
 
     return output;
 }
