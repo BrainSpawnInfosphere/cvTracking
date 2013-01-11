@@ -25,13 +25,13 @@
 #include <opencv2/highgui/highgui.hpp>
 
 
-#include <cvblob.h>
+#include <cvt.h>
 #include <cvRender.h>
-using namespace cvb;
+using namespace cvt;
 
 int main()
 {
-  CvTracks tracks;
+  Tracks tracks;
 
   cv::namedWindow("test_tracking", CV_WINDOW_AUTOSIZE);
   
@@ -54,19 +54,19 @@ int main()
     cvtColor(frame, grey, CV_RGB2GRAY);
     cv::threshold(grey, grey, 100, 200, CV_THRESH_BINARY);
 
-    CvBlobs blobs;
+    Blobs blobs;
     blobs.getBlobs(grey);
-    blobs.cvFilterByArea(500, 1000);
+    blobs.filterByArea(500, 1000);
 
     cvUpdateTracks(blobs, tracks, 5., 10);
     //cvUpdateTracks(blobs, tracks, 10., 5);
 
-    cvRenderBlobs(frame, blobs);
-    cvRenderTracks(frame, tracks);
+    Render(frame, blobs);
+    Render(frame, tracks);
 
     cv:imshow("test_tracking", frame);
 
-    if ((cvWaitKey(10)&0xff)==27)
+    if ((cv::waitKey(10)&0xff)==27)
       break;
       
     capture >> frame;

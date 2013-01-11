@@ -1,25 +1,19 @@
-# cvBlob
+# cvTracking Library
 
 **Maintainer:** Kevin Walchko
 
 **License:** LGPL
 
-cvBlob is written for OpenCV 2.x library which uses modern C++ concepts. 
-
-cvBlob used parts and ideas from Cristóbal Carnero Liñán's (grendel.ccl@gmail.com) 
-[cvBlob](http://code.google.com/p/cvblob/). 
+cvTracking is written for OpenCV 2.x library which uses modern C++ concepts. 
 
 ---------------------------------------------------------------------------------------
 
 ## To Do
 
-* [done] Change all `structs` to `classes`
-* [done] Change `IplImage` to `Mat`
 * Optimize code 
 * Leverage OpenCV 2.x API, remove unnecessary old C code
 * Document code for doxygen output
 * Build and install documentation to share/docs
-* Make better name than cvBlob so as not to add more confusion with all of the cvBlob libraries
 
 ## Source Code
 
@@ -32,10 +26,10 @@ The git repository is located at [cvBlob](http://github.com/walcko/cvBlob). The 
 ### Linux
 
 You will need to install openvcv and cmake using whatever package manager (e.g., apt-get,
-pacman) your linux distribution uses. Once you have unpacked the source in $CVBLOB, enter 
+pacman) your linux distribution uses. Once you have unpacked the source in $CVT, enter 
 in a console:
 
-	cd $CVBLOB
+	cd $CVT
 	mkdir build
 	cd build
 	cmake ..
@@ -48,7 +42,7 @@ Use the [homebrew](http://mxcl.github.com/homebrew/) formula to install or follo
 linux example.
 
     brew update
-    brew install $CVBLOB/homebrew/cvblob.rb
+    brew install $CVT/homebrew/cvblob.rb
 
 ### Useful CMake Options
 
@@ -66,7 +60,7 @@ To change the destination path for the installation, set "CMAKE_INSTALL_PREFIX" 
 
 ## Documentation
 
-To build the documentation using [Doxygen](), just type:
+To build the documentation using [Doxygen](www.doxygen.org), just type:
 
     make doc
 

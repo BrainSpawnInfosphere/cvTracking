@@ -1,31 +1,31 @@
 
 #include "cvRender.h"
-#include "cvblob.h"
+#include "cvt.h"
 #include <stdio.h>
 #include <sstream>
 
 
-namespace cvb // namespace_start
+namespace cvt // namespace_start
 {
 
 /** 
  * add: contour option, cm option
  */
-void cvRenderBlob(cv::Mat& image, CvBlob *blob, const cv::Scalar color){
+void Render(cv::Mat& image, Blob *blob, const cv::Scalar color){
     cv::drawContours( image, blob->contour, 0, color, 2); //CV_FILLED); //2, 8, cv::Vec4i(-1,-1,-1,-1), 0, Point() );
 
     cv::circle( image, blob->centroid, 4, color, -1, 8, 0 );
 }
 
-void cvRenderBlobs(cv::Mat& image, CvBlobs &blobs){
+void Render(cv::Mat& image, Blobs &blobs){
     cv::Scalar color = cv::Scalar( 0, 255, 0 );
-    CvBlobs::iterator it;
-    for ( it=blobs.begin(); it != blobs.end(); it++ ) cvRenderBlob(image, (*it).second, color);
+    Blobs::iterator it;
+    for ( it=blobs.begin(); it != blobs.end(); it++ ) Render(image, (*it).second, color);
 }
 
 int font = cv::FONT_HERSHEY_SCRIPT_SIMPLEX;
 
-void cvRenderTrack(cv::Mat& image, CvTrack* track, cv::Scalar color){
+void Render(cv::Mat& image, Track* track, const cv::Scalar color){
     cv::Rect box(track->minx,track->miny,track->maxx-track->minx,track->maxy-track->miny);
     cv::rectangle(image,box,color);
     
@@ -38,10 +38,10 @@ void cvRenderTrack(cv::Mat& image, CvTrack* track, cv::Scalar color){
     cv::putText(image,id.c_str(),orig,font,0.5,color);
 }
 
-void cvRenderTracks(cv::Mat& image, CvTracks& tracks){
+void Render(cv::Mat& image, Tracks& tracks){
     cv::Scalar color = cv::Scalar( 0, 255, 255 );
-    std::map<CvID, CvTrack *>::iterator it;
-    for ( it=tracks.begin(); it != tracks.end(); it++ ) cvRenderTrack(image, (*it).second, color);
+    std::map<CvID, Track *>::iterator it;
+    for ( it=tracks.begin(); it != tracks.end(); it++ ) Render(image, (*it).second, color);
 }
 
 } // namespace_end

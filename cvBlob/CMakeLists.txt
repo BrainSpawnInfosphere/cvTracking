@@ -18,7 +18,7 @@ add_library(cvblob SHARED ${cvBlob_CVBLOB})
 
 target_link_libraries(cvblob ${OpenCV_LIBS})
 
-install(FILES cvblob.h cvRender.h DESTINATION include/cvblob)
+install(FILES cvt.h cvRender.h DESTINATION include/cvblob)
 
 install(TARGETS cvblob
         RUNTIME DESTINATION bin

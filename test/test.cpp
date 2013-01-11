@@ -20,17 +20,12 @@
 #include <iostream>
 using namespace std;
 
-#if (defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__))
-    #include <opencv.h>
-    #include <highgui.h>
-#else
-    #include <opencv2/opencv.hpp>
-    #include <opencv2/highgui/highgui.hpp>
-#endif
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
-#include <cvblob.h>
+#include <cvt.h>
 #include <cvRender.h>
-using namespace cvb;
+using namespace cvt;
 using namespace std;
 
 int main()
@@ -46,7 +41,7 @@ int main()
   
   
 
-  CvBlobs blobs;
+  Blobs blobs;
   
   //exit(0);
   
@@ -54,49 +49,15 @@ int main()
   
   cout<<"blobs: "<<endl;
   
-  CvBlobs::iterator it=blobs.begin();
+  Blobs::iterator it=blobs.begin();
     while(it!=blobs.end())
     {
-        CvBlob *blob=(*it).second;
+        Blob *blob=(*it).second;
         cout<<*blob<<endl;
         ++it;
     }
   
-  //exit(0);
-
-  cvRenderBlobs(draw, blobs);
-
-  //unsigned int i = 0;
-
-  // Render contours:
-  //for (CvBlobs::const_iterator it=blobs.begin(); it!=blobs.end(); ++it)
-  //{
-    //cvRenderBlob(labelImg, (*it).second, img, imgOut);
-    
-    //CvScalar meanColor = cvBlobMeanColor((*it).second, labelImg, img);
-    //cout << "Mean color: r=" << (unsigned int)meanColor.val[0] << ", g=" << (unsigned int)meanColor.val[1] << ", b=" << (unsigned int)meanColor.val[2] << endl;
-
-    //CvContourPolygon *polygon = cvConvertChainCodesToPolygon(&(*it).second->contour);
-
-    //CvContourPolygon *sPolygon = cvSimplifyPolygon(polygon, 10.);
-    //CvContourPolygon *cPolygon = cvPolygonContourConvexHull(sPolygon);
-
-    //cvRenderContourChainCode(&(*it).second->contour, imgOut);
-    //cvRenderContourPolygon(sPolygon, imgOut, CV_RGB(0, 0, 255));
-    //cvRenderContourPolygon(cPolygon, imgOut, CV_RGB(0, 255, 0));
-
-    //delete cPolygon;
-    //delete sPolygon;
-    //delete polygon;
-
-    // Render internal contours:
-    //for (CvContoursChainCode::const_iterator jt=(*it).second->internalContours.begin(); jt!=(*it).second->internalContours.end(); ++jt)
-      //cvRenderContourChainCode((*jt), imgOut);
-
-    //stringstream filename;
-    //filename << "blob_" << setw(2) << setfill('0') << i++ << ".png";
-    //cvSaveImageBlob(filename.str().c_str(), imgOut, (*it).second);
-  //}
+  Render(draw, blobs);
 
   cv::namedWindow("test", 1);
   cv::imshow("test", draw);

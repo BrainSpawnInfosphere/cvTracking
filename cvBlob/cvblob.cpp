@@ -1,37 +1,35 @@
 // Copyright (C) 2007 by Cristóbal Carnero Liñán
 // grendel.ccl@gmail.com
 //
-// This file is part of cvBlob.
+// This file is part of Blob.
 //
-// cvBlob is free software: you can redistribute it and/or modify
+// Blob is free software: you can redistribute it and/or modify
 // it under the terms of the Lesser GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// cvBlob is distributed in the hope that it will be useful,
+// Blob is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // Lesser GNU General Public License for more details.
 //
 // You should have received a copy of the Lesser GNU General Public License
-// along with cvBlob.  If not, see <http://www.gnu.org/licenses/>.
+// along with Blob.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include <cmath>
 #include <iostream>
 using namespace std;
 
-#include "cvblob.h"
+#include "cvt.h"
 
-namespace cvb
+namespace cvt
 {
 
-//CvLabel CvBlobs::currentLabel = 0;
-
-bool CvBlobs::getBlobs(const cv::Mat& image){
+bool Blobs::getBlobs(const cv::Mat& image){
   vector<vector<cv::Point> > contours;
   vector<cv::Vec4i> hierarchy;
-  CvLabel currentLabel = 0;
+  Label currentLabel = 0;
   
     /// Find contours
   cv::findContours( image, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0) );
@@ -39,10 +37,10 @@ bool CvBlobs::getBlobs(const cv::Mat& image){
     if( contours.size() == 0) return false; // nothing found, exit
     
     for(unsigned int i = 0; i < contours.size(); i++ ){
-        CvBlob* blob = new CvBlob;
+        Blob* blob = new Blob;
         
         cv::Moments m = cv::moments(contours[i],false); // moments
-        CvLabel l = currentLabel++;
+        Label l = currentLabel++;
         std::vector<cv::Point> contours_poly;
         cv::approxPolyDP( cv::Mat(contours[i]), contours_poly, 3, true );
         cv::Rect r = cv::boundingRect( cv::Mat(contours_poly) );
@@ -53,20 +51,20 @@ bool CvBlobs::getBlobs(const cv::Mat& image){
         blob->contour.push_back(v);
         
         // need to push into map!!
-        insert( pair<CvLabel,CvBlob*>(l,blob) );
+        insert( pair<Label,Blob*>(l,blob) );
     }
     
     return true;
 }
 
-CvLabel CvBlobs::cvLargestBlob(void)
+Label Blobs::largestBlob(void)
 {
-    CvLabel label=0;
+    Label label=0;
     unsigned int maxArea=0;
 
-    for (CvBlobs::const_iterator it=begin(); it!=end(); ++it)
+    for (Blobs::const_iterator it=begin(); it!=end(); ++it)
     {
-        CvBlob *blob=(*it).second;
+        Blob *blob=(*it).second;
 
         if (blob->getArea() > maxArea)
         {
@@ -78,15 +76,15 @@ CvLabel CvBlobs::cvLargestBlob(void)
     return label;
 }
 
-void CvBlobs::cvFilterByArea(unsigned int minArea, unsigned int maxArea)
+void Blobs::filterByArea(unsigned int minArea, unsigned int maxArea)
 {
-    CvBlobs::iterator it=begin();
+    Blobs::iterator it=begin();
     while(it!=end())
     {
-        CvBlob *blob=(*it).second;
+        Blob *blob=(*it).second;
         if ((blob->getArea()<minArea)||(blob->getArea()>maxArea))
         {
-            CvBlobs::iterator tmp=it;
+            Blobs::iterator tmp=it;
             ++it;
             erase(tmp);
         }
@@ -95,16 +93,16 @@ void CvBlobs::cvFilterByArea(unsigned int minArea, unsigned int maxArea)
     }
 }
 
-void CvBlobs::cvFilterByLabel(CvLabel label)
+void Blobs::filterByLabel(Label label)
 {
-    CvBlobs::iterator it=begin();
+    Blobs::iterator it=begin();
     while(it!=end())
     {
-        CvBlob *blob=(*it).second;
+        Blob *blob=(*it).second;
         if (blob->label!=label)
         {
             delete blob;
-            CvBlobs::iterator tmp=it;
+            Blobs::iterator tmp=it;
             ++it;
             erase(tmp);
         }
@@ -115,21 +113,16 @@ void CvBlobs::cvFilterByLabel(CvLabel label)
 
 
 // Returns radians
-double CvBlob::cvAngle(void)
+double Blob::angle(void)
 {
-    CV_FUNCNAME("cvAngle");
-    __CV_BEGIN__;
-
     return 0.5*atan2(2.0*moment.mu11,(moment.mu20-moment.mu02));
-
-    __CV_END__;
 }
 
 }
 
-ostream& operator<< (ostream& output, const cvb::CvBlob& b)
+ostream& operator<< (ostream& output, const cvt::Blob& b)
 {
-    output << b.label << ": " << b.getArea() << ", (" << b.centroid.x << ", " << b.centroid.y << "), [(" << b.minx << ", " << b.miny << ") - (" << b.maxx << ", " << b.maxy << ")] contours:"<<b.contour.size();
+    output << b.label << ": " << b.getArea() << ", (" << b.centroid.x << ", " << b.centroid.y << "), [(" << b.minx << ", " << b.miny << ") - (" << b.maxx << ", " << b.maxy << ")]";
 
     return output;
 }

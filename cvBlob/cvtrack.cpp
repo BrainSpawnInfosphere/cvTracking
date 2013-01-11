@@ -1,30 +1,30 @@
 // Copyright (C) 2007 by Cristóbal Carnero Liñán
 // grendel.ccl@gmail.com
 //
-// This file is part of cvBlob.
+// This file is part of Blob.
 //
-// cvBlob is free software: you can redistribute it and/or modify
+// Blob is free software: you can redistribute it and/or modify
 // it under the terms of the Lesser GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// cvBlob is distributed in the hope that it will be useful,
+// Blob is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // Lesser GNU General Public License for more details.
 //
 // You should have received a copy of the Lesser GNU General Public License
-// along with cvBlob.  If not, see <http://www.gnu.org/licenses/>.
+// along with Blob.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 
-#include "cvblob.h"
+#include "cvt.h"
 
 using namespace std;
-namespace cvb // namespace_start
+namespace cvt // namespace_start
 {
 
-double distantBlobTrack(CvBlob const *b, CvTrack const *t)
+double distantBlobTrack(Blob const *b, Track const *t)
 {
     double d1;
     if (b->centroid.x<t->minx)
@@ -99,9 +99,9 @@ double distantBlobTrack(CvBlob const *b, CvTrack const *t)
 #define B(label) blobs.find(IB(label))->second
 #define T(id) tracks.find(IT(id))->second
 
-void getClusterForTrack(unsigned int trackPos, CvID *close, unsigned int nBlobs, unsigned int nTracks, CvBlobs const &blobs, CvTracks const &tracks, list<CvBlob*> &bb, list<CvTrack*> &tt);
+void getClusterForTrack(unsigned int trackPos, CvID *close, unsigned int nBlobs, unsigned int nTracks, Blobs const &blobs, Tracks const &tracks, list<Blob*> &bb, list<Track*> &tt);
 
-void getClusterForBlob(unsigned int blobPos, CvID *close, unsigned int nBlobs, unsigned int nTracks, CvBlobs const &blobs, CvTracks const &tracks, list<CvBlob*> &bb, list<CvTrack*> &tt)
+void getClusterForBlob(unsigned int blobPos, CvID *close, unsigned int nBlobs, unsigned int nTracks, Blobs const &blobs, Tracks const &tracks, list<Blob*> &bb, list<Track*> &tt)
 {
     for (unsigned int j=0; j<nTracks; j++)
     {
@@ -123,7 +123,7 @@ void getClusterForBlob(unsigned int blobPos, CvID *close, unsigned int nBlobs, u
     }
 }
 
-void getClusterForTrack(unsigned int trackPos, CvID *close, unsigned int nBlobs, unsigned int nTracks, CvBlobs const &blobs, CvTracks const &tracks, list<CvBlob*> &bb, list<CvTrack*> &tt)
+void getClusterForTrack(unsigned int trackPos, CvID *close, unsigned int nBlobs, unsigned int nTracks, Blobs const &blobs, Tracks const &tracks, list<Blob*> &bb, list<Track*> &tt)
 {
     for (unsigned int i=0; i<nBlobs; i++)
     {
@@ -145,7 +145,7 @@ void getClusterForTrack(unsigned int trackPos, CvID *close, unsigned int nBlobs,
     }
 }
 
-void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDistance, const unsigned int thInactive, const unsigned int thActive)
+void cvUpdateTracks(Blobs const &blobs, Tracks &tracks, const double thDistance, const unsigned int thInactive, const unsigned int thActive)
 {
     CV_FUNCNAME("cvUpdateTracks");
     __CV_BEGIN__;
@@ -156,13 +156,13 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
     // Proximity matrix:
     // Last row/column is for ID/label.
     // Last-1 "/" is for accumulation.
-    CvID *close = new unsigned int[(nBlobs+2)*(nTracks+2)]; // XXX Must be same type than CvLabel.
+    CvID *close = new unsigned int[(nBlobs+2)*(nTracks+2)]; // XXX Must be same type than Label.
 
     try
     {
         // Inicialization:
         unsigned int i=0;
-        for (CvBlobs::const_iterator it = blobs.begin(); it!=blobs.end(); ++it, i++)
+        for (Blobs::const_iterator it = blobs.begin(); it!=blobs.end(); ++it, i++)
         {
             AB(i) = 0;
             IB(i) = it->second->label;
@@ -171,7 +171,7 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
         CvID maxTrackID = 0;
 
         unsigned int j=0;
-        for (CvTracks::const_iterator jt = tracks.begin(); jt!=tracks.end(); ++jt, j++)
+        for (Tracks::const_iterator jt = tracks.begin(); jt!=tracks.end(); ++jt, j++)
         {
             AT(j) = 0;
             IT(j) = jt->second->id;
@@ -201,7 +201,7 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
                 //cout << "Inactive track: " << j << endl;
 
                 // Inactive track.
-                CvTrack *track = T(j);
+                Track *track = T(j);
                 track->inactive++;
                 track->label = 0;
             }
@@ -219,8 +219,8 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
 
                 // New track.
                 maxTrackID++;
-                CvBlob *blob = B(i);
-                CvTrack *track = new CvTrack;
+                Blob *blob = B(i);
+                Track *track = new Track;
                 track->id = maxTrackID;
                 track->label = blob->label;
                 track->minx = blob->minx;
@@ -242,18 +242,18 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
 
             if (c)
             {
-                list<CvTrack*> tt;
+                list<Track*> tt;
                 tt.push_back(T(j));
-                list<CvBlob*> bb;
+                list<Blob*> bb;
 
                 getClusterForTrack(j, close, nBlobs, nTracks, blobs, tracks, bb, tt);
 
                 // Select track
-                CvTrack *track;
+                Track *track;
                 unsigned int area = 0;
-                for (list<CvTrack*>::const_iterator it=tt.begin(); it!=tt.end(); ++it)
+                for (list<Track*>::const_iterator it=tt.begin(); it!=tt.end(); ++it)
                 {
-                    CvTrack *t = *it;
+                    Track *t = *it;
 
                     unsigned int a = (t->maxx-t->minx)*(t->maxy-t->miny);
                     if (a>area)
@@ -264,12 +264,12 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
                 }
 
                 // Select blob
-                CvBlob *blob;
+                Blob *blob;
                 area = 0;
                 //cout << "Matching blobs: ";
-                for (list<CvBlob*>::const_iterator it=bb.begin(); it!=bb.end(); ++it)
+                for (list<Blob*>::const_iterator it=bb.begin(); it!=bb.end(); ++it)
                 {
-                    CvBlob *b = *it;
+                    Blob *b = *it;
 
                     //cout << b->label << " ";
 
@@ -294,9 +294,9 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
                 track->inactive = 0;
 
                 // Others to inactive
-                for (list<CvTrack*>::const_iterator it=tt.begin(); it!=tt.end(); ++it)
+                for (list<Track*>::const_iterator it=tt.begin(); it!=tt.end(); ++it)
                 {
-                    CvTrack *t = *it;
+                    Track *t = *it;
 
                     if (t!=track)
                     {
@@ -309,7 +309,7 @@ void cvUpdateTracks(CvBlobs const &blobs, CvTracks &tracks, const double thDista
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        for (CvTracks::iterator jt=tracks.begin(); jt!=tracks.end();)
+        for (Tracks::iterator jt=tracks.begin(); jt!=tracks.end();)
             if ((jt->second->inactive>=thInactive)||((jt->second->inactive)&&(thActive)&&(jt->second->active<thActive)))
             {
                 delete jt->second;

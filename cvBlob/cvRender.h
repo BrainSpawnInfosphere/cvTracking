@@ -1,23 +1,23 @@
 
-#ifndef __CVB_RENDER_H__
-#define __CVB_RENDER_H__
+#ifndef __CVT_RENDER_H__
+#define __CVT_RENDER_H__
 
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 
-#include "cvblob.h"
+#include "cvt.h"
 
-namespace cvb // namespace_start
+namespace cvt // namespace_start
 {
 // Blobs
-void cvRenderBlob(const CvBlob *blob, cv::Mat& image, cv::Scalar color);
-void cvRenderBlobs(cv::Mat& image, CvBlobs& blobs);
+void Render(cv::Mat& image, Blob *blob,  cv::Scalar color);
+void Render(cv::Mat& image, Blobs& blobs);
 
 // Tracks
-void cvRenderTracks(cv::Mat& image, CvTracks& tracks, cv::Scalar color);
-void cvRenderTracks(cv::Mat& image, CvTracks& tracks);
+void Render(cv::Mat& image, Tracks& tracks, cv::Scalar color);
+void Render(cv::Mat& image, Tracks& tracks);
 
 } // namespace_end
 
