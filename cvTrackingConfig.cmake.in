@@ -13,9 +13,9 @@
 #      - cvTacking_LIB_DIR       : The directory where lib files are. Calling LINK_DIRECTORIES
 #                                with this path is NOT needed.
 #      - cvTacking_INCLUDE_DIRS  : The cvTacking include directories.
-#      - cvTacking_VERSION       : The  version of this cvTacking build. Example: "0.10.3"
-#      - cvTacking_VERSION_MAJOR : Major version part of cvTacking_VERSION. Example: "0"
-#      - cvTacking_VERSION_MINOR : Minor version part of cvTacking_VERSION. Example: "10"
+#      - cvTacking_VERSION       : The  version of this cvTacking build. Example: "1.2.3"
+#      - cvTacking_VERSION_MAJOR : Major version part of cvTacking_VERSION. Example: "1"
+#      - cvTacking_VERSION_MINOR : Minor version part of cvTacking_VERSION. Example: "2"
 #      - cvTacking_VERSION_PATCH : Patch version part of cvTacking_VERSION. Example: "3"
 #
 # ===================================================================================

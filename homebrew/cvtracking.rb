@@ -1,8 +1,8 @@
 require 'formula'
 
 class Cvtracking < Formula
-  url 'git://github.com/walchko/cvTracking.git', :branch => "Tracker"
-  #version "0.11.0"
+  url 'https://github.com/walchko/cvTracking.git', :branch => "Tracker"
+  version "0.1.0"
   homepage 'http://github.com/walchko/cvTracking'
   
   depends_on 'cmake' => :build
