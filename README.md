@@ -17,9 +17,9 @@ cvTracking is written for OpenCV 2.x library which uses modern C++ concepts.
 
 ## Source Code
 
-The git repository is located at [cvBlob](http://github.com/walcko/cvBlob). The code can be checked out:
+The git repository is located at [cvTracking](http://github.com/walcko/cvTracking). The code can be checked out:
 
-	git clone http://github.com/walcko/cvBlob
+	git clone http://github.com/walcko/cvTracking
 
 ## Compiling and Installation
 
@@ -42,7 +42,7 @@ Use the [homebrew](http://mxcl.github.com/homebrew/) formula to install or follo
 linux example.
 
     brew update
-    brew install $CVT/homebrew/cvblob.rb
+    brew install $CVT/homebrew/cvtracking.rb
 
 ### Useful CMake Options
 

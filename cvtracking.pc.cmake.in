@@ -5,9 +5,9 @@ exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
-Name: cvBlob
-Description: Blob library for OpenCV
+Name: cvTracking
+Description: Tracking library for OpenCV
 Version: @version@
-Libs: -L${libdir} -lcvblob
+Libs: -L${libdir} -lcvtracking
 Cflags: -I${includedir}
 
