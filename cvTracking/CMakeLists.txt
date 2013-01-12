@@ -1,26 +1,22 @@
 find_package(OpenCV REQUIRED)
 
-set(cvBlob_CVBLOB  cvblob.cpp
-#                   cvlabel.cpp
-#                   cvaux.cpp
-#                   cvcontour.cpp
+set(cvTracking_SRC  cvblob.cpp
                    cvtrack.cpp
-#                   cvcolor.cpp
                    cvRender.cpp
 )
 
-set_source_files_properties(${cvBlob_SRC}
-                            PROPERTIES
-                            COMPILE_FLAGS "-O3"
-)
+#set_source_files_properties(${cvTracking_SRC}
+#                            PROPERTIES
+#                            COMPILE_FLAGS "-O3"
+#)
 
-add_library(cvblob SHARED ${cvBlob_CVBLOB})
+add_library(cvtracking SHARED ${cvTracking_SRC})
 
-target_link_libraries(cvblob ${OpenCV_LIBS})
+target_link_libraries(cvtracking ${OpenCV_LIBS})
 
-install(FILES cvt.h cvRender.h DESTINATION include/cvblob)
+install(FILES cvt.h cvRender.h DESTINATION include/cvtracking)
 
-install(TARGETS cvblob
+install(TARGETS cvtracking
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
