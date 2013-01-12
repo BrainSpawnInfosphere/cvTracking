@@ -21,76 +21,65 @@
 #include <string>
 
 
-#if (defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__))
-    #include <opencv.h>
-    #include <highgui.h>
-#else
-    #include <opencv2/opencv.hpp>
-    #include <opencv2/highgui/highgui.hpp>
-#endif
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 
-#include <cvblob.h>
+#include <cvt.h>
 #include <cvRender.h>
-using namespace cvb;
+using namespace cvt;
 
-int main()
+int main( int argc, char** argv )
 {
-  CvTracks tracks;
+  Tracks tracks;
+  
+  if(argc != 2){
+    std::cout<<"Please provide a file name: test_tracking <filename>"<<std::endl;
+    exit(-1);
+  }
 
-  cvNamedWindow("test_tracking", CV_WINDOW_AUTOSIZE);
+  cv::namedWindow("test_tracking", CV_WINDOW_AUTOSIZE);
   
-  std::string file = "EnterExitCrossingPaths2front_blobs.mpeg";
-  CvCapture *capture=cvCreateFileCapture(file.c_str());
+  std::string file = argv[1];
+  cv::VideoCapture capture;
+  bool good = capture.open(file.c_str());
   
-  if(capture <= 0){
+  if(!good){
     std::cout << "Couldn't load " << file << std::endl;
     exit(-1);
   }
 
-  cvGrabFrame(capture);
-  IplImage *img = cvRetrieveFrame(capture);
+  cv::Mat frame;
+  cv::Mat grey;
+  
+  capture >> frame;
 
-  IplImage *frame = cvCreateImage(cvGetSize(img), img->depth, img->nChannels);
-
-  while (cvGrabFrame(capture))
+  while (capture.isOpened())
   {
-    IplImage *img = cvRetrieveFrame(capture);
+    // grab next image
+    capture >> frame;
+    
+    // use simple thresholding to create single channel blob image
+    cvtColor(frame, grey, CV_RGB2GRAY);
+    cv::threshold(grey, grey, 100, 200, CV_THRESH_BINARY);
 
-    cvResetImageROI(frame);
-    cvConvertScale(img, frame, 1, 0);
-    cvThreshold(frame, frame, 100, 200, CV_THRESH_BINARY);
-
-    cvSetImageROI(frame, cvRect(0, 25, 383, 287));
-
-    IplImage *chB=cvCreateImage(cvGetSize(frame),8,1);
-    cvSplit(frame,chB,NULL,NULL,NULL);
-
-    IplImage *labelImg = cvCreateImage(cvGetSize(frame), IPL_DEPTH_LABEL, 1);
-
-    CvBlobs blobs;
-    unsigned int result = cvLabel(chB, labelImg, blobs);
-
-    cvFilterByArea(blobs, 500, 1000);
+    // find blobs in image and filter out things too small or too large
+    Blobs blobs;
+    blobs.getBlobs(grey);
+    blobs.filterByArea(500, 1000);
 
     cvUpdateTracks(blobs, tracks, 5., 10);
     //cvUpdateTracks(blobs, tracks, 10., 5);
 
-    cvRenderBlobs(labelImg, blobs, frame, frame, CV_BLOB_RENDER_CENTROID|CV_BLOB_RENDER_BOUNDING_BOX);
-    cvRenderTracks(tracks, frame, frame, CV_TRACK_RENDER_ID|CV_TRACK_RENDER_BOUNDING_BOX|CV_TRACK_RENDER_TO_LOG);
+    // draw things
+    Render(frame, blobs);
+    Render(frame, tracks);
 
-    cvShowImage("test_tracking", frame);
+    cv:imshow("test_tracking", frame);
 
-    cvReleaseImage(&chB);
-    cvReleaseImage(&labelImg);
-
-    if ((cvWaitKey(10)&0xff)==27)
+    if ((cv::waitKey(10)&0xff)==27)
       break;
   }
-
-  cvReleaseImage(&frame);
-
-  cvDestroyWindow("test_tracking");
 
   return 0;
 }
