@@ -122,7 +122,7 @@ double Blob::angle(void)
 
 ostream& operator<< (ostream& output, const cvt::Blob& b)
 {
-    output << b.label << ": " << b.getArea() << ", (" << b.centroid.x << ", " << b.centroid.y << "), [(" << b.minx << ", " << b.miny << ") - (" << b.maxx << ", " << b.maxy << ")]";
+    output << b.label << ": " << b.getArea() << ", (" << b.centroid.x << ", " << b.centroid.y << "), [(" << b.bbox.x << ", " << b.bbox.y << ") - (" << b.bbox.width << ", " << b.bbox.height << ")]";
 
     return output;
 }

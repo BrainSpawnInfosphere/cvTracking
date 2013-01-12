@@ -29,13 +29,18 @@
 #include <cvRender.h>
 using namespace cvt;
 
-int main()
+int main( int argc, char** argv )
 {
   Tracks tracks;
+  
+  if(argc != 2){
+    std::cout<<"Please provide a file name: test_tracking <filename>"<<std::endl;
+    exit(-1);
+  }
 
   cv::namedWindow("test_tracking", CV_WINDOW_AUTOSIZE);
   
-  std::string file = "../test/EnterExitCrossingPaths2front_blobs.mpeg";
+  std::string file = argv[1];
   cv::VideoCapture capture;
   bool good = capture.open(file.c_str());
   
@@ -51,9 +56,14 @@ int main()
 
   while (capture.isOpened())
   {
+    // grab next image
+    capture >> frame;
+    
+    // use simple thresholding to create single channel blob image
     cvtColor(frame, grey, CV_RGB2GRAY);
     cv::threshold(grey, grey, 100, 200, CV_THRESH_BINARY);
 
+    // find blobs in image and filter out things too small or too large
     Blobs blobs;
     blobs.getBlobs(grey);
     blobs.filterByArea(500, 1000);
@@ -61,6 +71,7 @@ int main()
     cvUpdateTracks(blobs, tracks, 5., 10);
     //cvUpdateTracks(blobs, tracks, 10., 5);
 
+    // draw things
     Render(frame, blobs);
     Render(frame, tracks);
 
@@ -68,8 +79,6 @@ int main()
 
     if ((cv::waitKey(10)&0xff)==27)
       break;
-      
-    capture >> frame;
   }
 
   return 0;

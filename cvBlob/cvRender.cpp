@@ -26,10 +26,10 @@ void Render(cv::Mat& image, Blobs &blobs){
 int font = cv::FONT_HERSHEY_SCRIPT_SIMPLEX;
 
 void Render(cv::Mat& image, Track* track, const cv::Scalar color){
-    cv::Rect box(track->minx,track->miny,track->maxx-track->minx,track->maxy-track->miny);
+    cv::Rect box = track->bbox;
     cv::rectangle(image,box,color);
     
-    cv::Point orig(track->minx,track->miny);
+    cv::Point orig(track->bbox.x,track->bbox.y);
     //cv::Point orig(track->minx + box.width/2,track->miny+box.height/2);
     std::stringstream ss;
     std::string id;

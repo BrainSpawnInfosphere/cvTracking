@@ -62,11 +62,11 @@ namespace cvt // namespace_start
         centroid = cv::Point2f( mu.m10/mu.m00 , mu.m01/mu.m00 );
         moment = mu;
         label = l;
-        
-        minx = r.x;
-        maxx = r.x+r.width;
-        miny = r.y;
-        maxy = r.y+r.height;
+        bbox = r;
+        //minx = r.x;
+        //maxx = r.x+r.width;
+        //miny = r.y;
+        //maxy = r.y+r.height;
       }
     
     Label label; ///< Label assigned to the blob.
@@ -79,10 +79,11 @@ namespace cvt // namespace_start
     inline double getArea(void) const {return moment.m00;}
     
     // make this a cv::Rect
-    unsigned int minx; ///< X min.
-    unsigned int maxx; ///< X max.
-    unsigned int miny; ///< Y min.
-    unsigned int maxy; ///< y max.
+    //unsigned int minx; ///< X min.
+    //unsigned int maxx; ///< X max.
+    //unsigned int miny; ///< Y min.
+    //unsigned int maxy; ///< y max.
+    cv::Rect bbox;
     
     cv::Point2f centroid; ///< Centroid.
     std::vector< std::vector<cv::Point> > contour; ///< Contour for drawing
@@ -146,11 +147,11 @@ namespace cvt // namespace_start
     Label label; ///< Label assigned to the blob related to this track.
 
     // Rect!!!
-    unsigned int minx; ///< X min.
-    unsigned int maxx; ///< X max.
-    unsigned int miny; ///< Y min.
-    unsigned int maxy; ///< y max.
-    
+    //unsigned int minx; ///< X min.
+    //unsigned int maxx; ///< X max.
+    //unsigned int miny; ///< Y min.
+    //unsigned int maxy; ///< y max.
+    cv::Rect bbox;
     cv::Point2f centroid; ///< Centroid.
 
     unsigned int lifetime; ///< Indicates how much frames the object has been in scene.

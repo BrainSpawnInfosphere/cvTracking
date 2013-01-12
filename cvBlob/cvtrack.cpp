@@ -27,59 +27,59 @@ namespace cvt // namespace_start
 double distantBlobTrack(Blob const *b, Track const *t)
 {
     double d1;
-    if (b->centroid.x<t->minx)
+    if (b->centroid.x<t->bbox.x)
     {
-        if (b->centroid.y<t->miny)
-            d1 = MAX(t->minx - b->centroid.x, t->miny - b->centroid.y);
-        else if (b->centroid.y>t->maxy)
-            d1 = MAX(t->minx - b->centroid.x, b->centroid.y - t->maxy);
-        else // if (t->miny < b->centroid.y)&&(b->centroid.y < t->maxy)
-            d1 = t->minx - b->centroid.x;
+        if (b->centroid.y<t->bbox.y)
+            d1 = MAX(t->bbox.x - b->centroid.x, t->bbox.y - b->centroid.y);
+        else if (b->centroid.y>(t->bbox.y+t->bbox.height))
+            d1 = MAX(t->bbox.x - b->centroid.x, b->centroid.y - (t->bbox.y+t->bbox.height));
+        else // if (t->bbox.y < b->centroid.y)&&(b->centroid.y < (t->bbox.y+t->bbox.height))
+            d1 = t->bbox.x - b->centroid.x;
     }
-    else if (b->centroid.x>t->maxx)
+    else if (b->centroid.x>(t->bbox.x+t->bbox.width))
     {
-        if (b->centroid.y<t->miny)
-            d1 = MAX(b->centroid.x - t->maxx, t->miny - b->centroid.y);
-        else if (b->centroid.y>t->maxy)
-            d1 = MAX(b->centroid.x - t->maxx, b->centroid.y - t->maxy);
+        if (b->centroid.y<t->bbox.y)
+            d1 = MAX(b->centroid.x - (t->bbox.x+t->bbox.width), t->bbox.y - b->centroid.y);
+        else if (b->centroid.y>(t->bbox.y+t->bbox.height))
+            d1 = MAX(b->centroid.x - (t->bbox.x+t->bbox.width), b->centroid.y - (t->bbox.y+t->bbox.height));
         else
-            d1 = b->centroid.x - t->maxx;
+            d1 = b->centroid.x - (t->bbox.x+t->bbox.width);
     }
-    else // if (t->minx =< b->centroid.x) && (b->centroid.x =< t->maxx)
+    else // if (t->bbox.x =< b->centroid.x) && (b->centroid.x =< (t->bbox.x+t->bbox.width))
     {
-        if (b->centroid.y<t->miny)
-            d1 = t->miny - b->centroid.y;
-        else if (b->centroid.y>t->maxy)
-            d1 = b->centroid.y - t->maxy;
+        if (b->centroid.y<t->bbox.y)
+            d1 = t->bbox.y - b->centroid.y;
+        else if (b->centroid.y>(t->bbox.y+t->bbox.height))
+            d1 = b->centroid.y - (t->bbox.y+t->bbox.height);
         else
             return 0.;
     }
 
     double d2;
-    if (t->centroid.x<b->minx)
+    if (t->centroid.x<b->bbox.x)
     {
-        if (t->centroid.y<b->miny)
-            d2 = MAX(b->minx - t->centroid.x, b->miny - t->centroid.y);
-        else if (t->centroid.y>b->maxy)
-            d2 = MAX(b->minx - t->centroid.x, t->centroid.y - b->maxy);
-        else // if (b->miny < t->centroid.y)&&(t->centroid.y < b->maxy)
-            d2 = b->minx - t->centroid.x;
+        if (t->centroid.y<b->bbox.y)
+            d2 = MAX(b->bbox.x - t->centroid.x, b->bbox.y - t->centroid.y);
+        else if (t->centroid.y>(b->bbox.y+b->bbox.height))
+            d2 = MAX(b->bbox.x - t->centroid.x, t->centroid.y - (b->bbox.y+b->bbox.height));
+        else // if (b->bbox.y < t->centroid.y)&&(t->centroid.y < (b->bbox.y+b->bbox.height))
+            d2 = b->bbox.x - t->centroid.x;
     }
-    else if (t->centroid.x>b->maxx)
+    else if (t->centroid.x>(b->bbox.x+b->bbox.width))
     {
-        if (t->centroid.y<b->miny)
-            d2 = MAX(t->centroid.x - b->maxx, b->miny - t->centroid.y);
-        else if (t->centroid.y>b->maxy)
-            d2 = MAX(t->centroid.x - b->maxx, t->centroid.y - b->maxy);
+        if (t->centroid.y<b->bbox.y)
+            d2 = MAX(t->centroid.x - (b->bbox.x+b->bbox.width), b->bbox.y - t->centroid.y);
+        else if (t->centroid.y>(b->bbox.y+b->bbox.height))
+            d2 = MAX(t->centroid.x - (b->bbox.x+b->bbox.width), t->centroid.y - (b->bbox.y+b->bbox.height));
         else
-            d2 = t->centroid.x - b->maxx;
+            d2 = t->centroid.x - (b->bbox.x+b->bbox.width);
     }
-    else // if (b->minx =< t->centroid.x) && (t->centroid.x =< b->maxx)
+    else // if (b->bbox.x =< t->centroid.x) && (t->centroid.x =< b->maxx)
     {
-        if (t->centroid.y<b->miny)
-            d2 = b->miny - t->centroid.y;
-        else if (t->centroid.y>b->maxy)
-            d2 = t->centroid.y - b->maxy;
+        if (t->centroid.y<b->bbox.y)
+            d2 = b->bbox.y - t->centroid.y;
+        else if (t->centroid.y>(b->bbox.y+b->bbox.height))
+            d2 = t->centroid.y - (b->bbox.y+b->bbox.height);
         else
             return 0.;
     }
@@ -223,10 +223,7 @@ void cvUpdateTracks(Blobs const &blobs, Tracks &tracks, const double thDistance,
                 Track *track = new Track;
                 track->id = maxTrackID;
                 track->label = blob->label;
-                track->minx = blob->minx;
-                track->miny = blob->miny;
-                track->maxx = blob->maxx;
-                track->maxy = blob->maxy;
+                track->bbox = blob->bbox;
                 track->centroid = blob->centroid;
                 track->lifetime = 0;
                 track->active = 0;
@@ -255,7 +252,7 @@ void cvUpdateTracks(Blobs const &blobs, Tracks &tracks, const double thDistance,
                 {
                     Track *t = *it;
 
-                    unsigned int a = (t->maxx-t->minx)*(t->maxy-t->miny);
+                    unsigned int a = ((t->bbox.x+t->bbox.width)-t->bbox.x)*((t->bbox.y+t->bbox.height)-t->bbox.y);
                     if (a>area)
                     {
                         area = a;
@@ -285,10 +282,7 @@ void cvUpdateTracks(Blobs const &blobs, Tracks &tracks, const double thDistance,
                 //cout << "Matching: track=" << track->id << ", blob=" << blob->label << endl;
                 track->label = blob->label;
                 track->centroid = blob->centroid;
-                track->minx = blob->minx;
-                track->miny = blob->miny;
-                track->maxx = blob->maxx;
-                track->maxy = blob->maxy;
+                track->bbox = blob->bbox;
                 if (track->inactive)
                     track->active = 0;
                 track->inactive = 0;

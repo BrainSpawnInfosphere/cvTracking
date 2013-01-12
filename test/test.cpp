@@ -28,27 +28,27 @@ using namespace std;
 using namespace cvt;
 using namespace std;
 
-int main()
+int main( int argc, char** argv )
 {
-  cv::Mat img = cv::imread("../test/test.png", 1);
+  // grab image file name
+  if(argc != 2){
+    std::cout<<"Please provide a file name: test <filename>"<<std::endl;
+    exit(-1);
+  }
+  
+  // read in image file and threshold to get blobs
+  cv::Mat img = cv::imread(argv[1], 1);
   cv::Mat draw;
   img.copyTo(draw);
-  //cv::Mat draw(img.rows, img.cols, CV_8UC3);
-  //cv::Mat roi = img(cv::Rect(100, 100, 800, 500));
   cv::Mat grey;
   cv::cvtColor(img, grey, CV_BGR2GRAY);
   cv::threshold(grey, grey, 100, 255, CV_THRESH_BINARY);
   
-  
-
+  // find blobs in the image and print their info
   Blobs blobs;
-  
-  //exit(0);
-  
   blobs.getBlobs(grey);
   
   cout<<"blobs: "<<endl;
-  
   Blobs::iterator it=blobs.begin();
     while(it!=blobs.end())
     {
@@ -57,6 +57,7 @@ int main()
         ++it;
     }
   
+  // draw them
   Render(draw, blobs);
 
   cv::namedWindow("test", 1);
