@@ -1,7 +1,7 @@
 require 'formula'
 
 class Cvtracking < Formula
-  url 'https://github.com/walchko/cvTracking.git'
+  url 'https://github.com/walchko/cvTracking.git', :branch => "Tracker"
   version "0.11.0"
   homepage 'http://github.com/walchko/cvTracking'
   
