@@ -64,6 +64,9 @@ int main()
         Render(frame, blobs);
         cvUpdateTracks(blobs, tracks, 200., 5);
         Render(frame, tracks);
+        
+        
+        cv::imshow("hue 2",hue);
 
         cv::imshow("red_object_tracking", frame);
 

@@ -26,10 +26,14 @@ using namespace std;
 namespace cvt
 {
 
-bool Blobs::getBlobs(const cv::Mat& image){
+bool Blobs::getBlobs(const cv::Mat& image_in){
   vector<vector<cv::Point> > contours;
   vector<cv::Vec4i> hierarchy;
   Label currentLabel = 0;
+  
+  // somehow image passed to function changes even though const ?????
+  cv::Mat image;
+  image_in.copyTo(image);
   
     /// Find contours
   cv::findContours( image, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0) );
