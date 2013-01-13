@@ -10,13 +10,13 @@ cvTracking is written for OpenCV 2.x library which uses modern C++ concepts.
 
 ## To Do
 
-* [ ] Optimize code 
-* [x] Leverage OpenCV 2.x API, remove unnecessary old C code
-* [ ] Document code for doxygen output
-* [ ] Build and install documentation to share/docs
-* [ ] Integrate histogram code
-* [ ] Integrate OpenTLD code
-* [ ] Make it easier to include other trackers
+- [ ] Optimize code 
+- [x] Leverage OpenCV 2.x API, remove unnecessary old C code
+- [ ] Document code for doxygen output
+- [ ] Build and install documentation to share/docs
+- [ ] Integrate histogram code
+- [ ] Integrate OpenTLD code
+- [ ] Make it easier to include other trackers
 
 ## Source Code
 
