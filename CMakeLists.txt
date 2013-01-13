@@ -19,6 +19,8 @@ add_subdirectory(test)
 add_subdirectory(samples)
 
 #--- Package Config -------------------------------------------------
+set(CMAKE_INCLUDE_DIRS_CONFIGCMAKE "${CMAKE_INSTALL_PREFIX}/include/")
+set(CMAKE_LIB_DIRS_CONFIGCMAKE "${CMAKE_INSTALL_PREFIX}/lib")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cvtracking.pc.cmake.in" "${CMAKE_BINARY_DIR}/cvtracking.pc" @ONLY IMMEDIATE)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cvTrackingConfig.cmake.in" "${CMAKE_BINARY_DIR}/cvTrackingConfig.cmake" IMMEDIATE @ONLY)
 
