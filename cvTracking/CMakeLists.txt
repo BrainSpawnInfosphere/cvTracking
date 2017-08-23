@@ -14,10 +14,10 @@ add_library(cvtracking SHARED ${cvTracking_SRC})
 
 target_link_libraries(cvtracking ${OpenCV_LIBS})
 
-install(FILES cvt.h cvRender.h DESTINATION include/cvtracking)
+#install(FILES cvt.h cvRender.h DESTINATION include/cvtracking)
 
-install(TARGETS cvtracking
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-)
+#install(TARGETS cvtracking
+#        RUNTIME DESTINATION bin
+#        LIBRARY DESTINATION lib
+#        ARCHIVE DESTINATION lib
+#)
